@@ -12,7 +12,7 @@ function requireEnv(name: string): string {
 
 export const config = {
   port: Number(process.env.PORT ?? 4000),
-  mongodbUri: requireEnv('MONGODB_URL'),
+  mongodbUri: requireEnv('MONGODB_URI'),
   jwtSecret: requireEnv('JWT_SECRET'),
   ingestionServiceUrl: requireEnv('INGESTION_SERVICE_URL'),
   ragServiceUrl: requireEnv('RAG_SERVICE_URL'),

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Body from './components/body'
+
 // Smoke-test page for the full stack: calls the gateway's health route and
 // renders whatever it returns. No routing/auth/feature UI here yet.
 function App() {
@@ -19,7 +19,6 @@ function App() {
       <p>GET /api/health</p>
       {error && <pre style={{ color: 'red' }}>{error}</pre>}
       {!error && <pre>{JSON.stringify(health, null, 2)}</pre>}
-      <Body />
     </main>
   )
 }
