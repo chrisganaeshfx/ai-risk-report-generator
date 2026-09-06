@@ -22,7 +22,7 @@ app.use('/api/speech', speechRoutes)
 async function start() {
   await connectDb()
   app.listen(config.port, () => {
-    console.log(`Gateway listening on port ${config.port}`)
+    console.log(`Gateway listening on port ${config.port}. Visit http://localhost:${config.port}/api/health for health check.`)
   })
 }
 
