@@ -1,3 +1,3 @@
 export function getHealth() {
-  return { status: 'ok' }
+  return { status: 200, message: "OK" };
 }
