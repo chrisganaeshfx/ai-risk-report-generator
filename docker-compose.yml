@@ -11,6 +11,13 @@ services:
     ports:
       - "4000:4000"
     env_file: .env
+    environment:
+      # Overrides the localhost defaults from .env — inside this container,
+      # the other services are reachable by Docker service name, not
+      # localhost. See CLAUDE.md "Known pitfalls".
+      INGESTION_SERVICE_URL: http://ingestion-service:8001
+      RAG_SERVICE_URL: http://rag-service:8002
+      SPEECH_OCR_SERVICE_URL: http://speech-ocr-service:8003
     depends_on:
       - mongo
     volumes:
