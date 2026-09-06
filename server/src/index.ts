@@ -26,7 +26,14 @@ async function start() {
   })
 }
 
-start().catch((err) => {
-  console.error('Failed to start server:', err)
-  process.exit(1)
-})
+// Only boot the server when this file is run directly (`node dist/index.js`,
+// `ts-node-dev src/index.ts`) — not when it's imported, e.g. by tests that
+// need `app` without a live DB connection or listening port.
+if (require.main === module) {
+  start().catch((err) => {
+    console.error('Failed to start server:', err)
+    process.exit(1)
+  })
+}
+
+export default app

@@ -9,7 +9,8 @@
     "start": "node dist/index.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -29,8 +30,10 @@
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.6",
+    "supertest": "^7.2.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.69.0"
+    "typescript-eslint": "^8.69.0",
+    "vitest": "^5.0.0"
   }
 }
