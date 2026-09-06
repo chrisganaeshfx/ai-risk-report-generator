@@ -6,6 +6,7 @@
   "author": "",
   "license": "MIT",
   "scripts": {
+    "install:all": "yarn install && yarn --cwd client install && yarn --cwd server install",
     "dev": "concurrently \"yarn --cwd client dev\" \"yarn --cwd server dev\"",
     "test": "concurrently \"yarn --cwd client test --run\" \"yarn --cwd server test --run\""
   },
