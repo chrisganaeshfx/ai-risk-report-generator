@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:watch": "vitest"
+    "test": "vitest run",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "react": "^19.2.8",

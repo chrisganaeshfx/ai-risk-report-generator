@@ -7,7 +7,7 @@
   "scripts": {
     "install:all": "npm install && npm --prefix client install && npm --prefix server install",
     "dev": "concurrently -n client,server -c cyan,green \"npm --prefix client run dev\" \"npm --prefix server run dev\"",
-    "test": "concurrently -n client,server -c cyan,green \"npm --prefix client test -- --run\" \"npm --prefix server test -- --run\""
+    "test": "concurrently -n client,server -c cyan,green \"npm --prefix client test\" \"npm --prefix server test\""
   },
   "devDependencies": {
     "concurrently": "^10.0.5"
