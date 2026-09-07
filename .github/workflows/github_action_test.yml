@@ -37,6 +37,15 @@ jobs:
       run:
         working-directory: server
 
+    # config.ts validates env at import time, so importing `app` in a test
+    # throws without these. Dummy values only — nothing here connects out.
+    env:
+      MONGODB_URI: mongodb://localhost:27017/a2603-test
+      JWT_SECRET: ci-test-secret-not-used-anywhere-real
+      INGESTION_SERVICE_URL: http://localhost:8001
+      RAG_SERVICE_URL: http://localhost:8002
+      SPEECH_OCR_SERVICE_URL: http://localhost:8003
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
