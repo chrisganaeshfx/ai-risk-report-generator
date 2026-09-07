@@ -159,10 +159,8 @@ jobs:
         run: python -c "from app.main import app; print(app.title)"
         working-directory: ${{ matrix.service }}
 
-      # pytest exits 5 when it finds no tests. There are none yet, so treat
-      # that as a pass — remove this guard once real tests land.
       - name: Pytest
-        run: pytest || [ $? -eq 5 ]
+        run: pytest
         working-directory: ${{ matrix.service }}
 
   # ── Docker images build ────────────────────────────────────────────────
