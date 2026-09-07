@@ -1,11 +1,11 @@
-name: Tests
-description: Run tests for client and server. Microservice test will be added once it is implemented.
+name: CI
 
 on:
   push:
   pull_request:
 
 jobs:
+  # ── Tests ──────────────────────────────────────────────────────────────
   client:
     runs-on: ubuntu-latest
 
@@ -62,3 +62,126 @@ jobs:
 
       - name: Run server tests
         run: npm test -- --run
+
+  # ── Lint and formatting (JS/TS) ────────────────────────────────────────
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [client, server]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+          cache-dependency-path: ${{ matrix.package }}/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ${{ matrix.package }}
+
+      - name: ESLint
+        run: npx eslint .
+        working-directory: ${{ matrix.package }}
+
+      - name: Prettier
+        run: npx prettier --check .
+        working-directory: ${{ matrix.package }}
+
+  # ── Build (also typechecks — both build scripts run tsc) ───────────────
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [client, server]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 26
+          cache: npm
+          cache-dependency-path: ${{ matrix.package }}/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ${{ matrix.package }}
+
+      - name: Build
+        run: npm run build
+        working-directory: ${{ matrix.package }}
+
+  # ── Python services ────────────────────────────────────────────────────
+  python:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [ingestion-service, rag-service, speech-ocr-service]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: ${{ matrix.service }}/pyproject.toml
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+        working-directory: ${{ matrix.service }}
+
+      - name: Ruff
+        run: ruff check .
+        working-directory: ${{ matrix.service }}
+
+      - name: Black
+        run: black --check .
+        working-directory: ${{ matrix.service }}
+
+      - name: Import smoke test
+        run: python -c "from app.main import app; print(app.title)"
+        working-directory: ${{ matrix.service }}
+
+      # pytest exits 5 when it finds no tests. There are none yet, so treat
+      # that as a pass — remove this guard once real tests land.
+      - name: Pytest
+        run: pytest || [ $? -eq 5 ]
+        working-directory: ${{ matrix.service }}
+
+  # ── Docker images build ────────────────────────────────────────────────
+  docker:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - client
+          - server
+          - ingestion-service
+          - rag-service
+          - speech-ocr-service
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t a2603-${{ matrix.service }}:ci ./${{ matrix.service }}
