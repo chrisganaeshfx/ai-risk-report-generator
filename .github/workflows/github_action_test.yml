@@ -45,6 +45,8 @@ jobs:
       INGESTION_SERVICE_URL: http://localhost:8001
       RAG_SERVICE_URL: http://localhost:8002
       SPEECH_OCR_SERVICE_URL: http://localhost:8003
+      AWS_REGION: ap-southeast-1
+      S3_BUCKET: ci-test-bucket
 
     steps:
       - name: Checkout
