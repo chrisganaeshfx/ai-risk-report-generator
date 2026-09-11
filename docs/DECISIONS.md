@@ -8,7 +8,7 @@ independent scaling and fault isolation per service.
 Story: F-01 (repo and branching setup).
 
 ## 2026-09-07 — Orchestration inside S4, not choreography
-Chose: a single controller function in rag-service/orchestrator.py calls
+Chose: a single controller function in microservices/rag-service/app/orchestrator/orchestrator.py calls
 retrieve → assemble → generate → guardrail-check as plain function calls.
 Rejected: choreographed event-driven agents. Reason: our evaluation harness
 (EV-01–EV-04) needs end-to-end trace of a single pipeline run; choreography

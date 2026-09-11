@@ -40,7 +40,7 @@ docker-compose up --build
 
 **Manual (bare processes, faster iteration, one terminal per service):** copy
 `.env.example` to `.env` in each service's own directory (`server/.env`,
-`rag-service/.env`, etc.), fill in real values, then run each service's own
+`microservices/rag-service/.env`, etc.), fill in real values, then run each service's own
 dev command (`npm run dev` for client/server, `uvicorn app.main:app --reload
 --port <port>` for the Python services).
 
