@@ -13,7 +13,8 @@ router.get('/', (_req, res) => {
 router.get('/database', async (_req, res) => {
   try {
     res.json(await getDatabaseHealth())
-  } catch {
+  } catch (error: unknown) {
+    console.error('Database health check failed:', error)
     res.status(503).json({
       status: 'degraded',
       database: 'down',
