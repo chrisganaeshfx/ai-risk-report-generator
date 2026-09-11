@@ -14,13 +14,9 @@ const Key = 's3-test/round-trip.txt'
 const body = `s3 round trip ${new Date().toISOString()}`
 
 async function verifyRoundTrip(): Promise<void> {
-  await s3.send(
-    new PutObjectCommand({ Bucket: config.s3Bucket, Key, Body: body }),
-  )
+  await s3.send(new PutObjectCommand({ Bucket: config.s3Bucket, Key, Body: body }))
 
-  const result = await s3.send(
-    new GetObjectCommand({ Bucket: config.s3Bucket, Key }),
-  )
+  const result = await s3.send(new GetObjectCommand({ Bucket: config.s3Bucket, Key }))
   const readBack = await result.Body?.transformToString()
 
   if (readBack !== body) {
@@ -36,7 +32,5 @@ verifyRoundTrip()
     process.exitCode = 1
   })
   .finally(async () => {
-    await s3
-      .send(new DeleteObjectCommand({ Bucket: config.s3Bucket, Key }))
-      .catch(() => undefined)
+    await s3.send(new DeleteObjectCommand({ Bucket: config.s3Bucket, Key })).catch(() => undefined)
   })

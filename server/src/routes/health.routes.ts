@@ -1,8 +1,5 @@
 import { Router } from 'express'
-import {
-  getDatabaseHealth,
-  getHealth,
-} from '../services/health.service'
+import { getDatabaseHealth, getHealth } from '../services/health.service'
 
 const router = Router()
 
