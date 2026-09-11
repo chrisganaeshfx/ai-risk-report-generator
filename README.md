@@ -19,20 +19,38 @@ over HTTP, sharing a MongoDB Atlas cluster and an AWS S3 bucket in the data tier
 | `speech-ocr-service` (S5) | Stateless STT and OCR, returns results only | Python/FastAPI | 8003 |
 | `mongo` | Local dev database (Atlas is used for staging/prod) | — | 27017 |
 
-This repository currently contains the scaffolded folder structure for each service
+Each service is currently scaffolded with stub routes only — the folder structure
 (routes/services/models separation in `server`, `api`/pipeline/orchestrator layout in
-the Python services); application code lands service-by-service as the project
-progresses. See `docs/DECISIONS.md` for why this is microservices rather than a
-monolith, and why S4 uses a single orchestrator function rather than choreography.
+the Python services) is in place, every route responds, but no route has real
+business logic yet (parsing, retrieval, generation, STT/OCR are all placeholders).
+Real logic lands service-by-service as the project progresses. See `docs/DECISIONS.md`
+for why this is microservices rather than a monolith, and why S4 uses a single
+orchestrator function rather than choreography.
 
 ## Running the stack locally
 
+One `.env.example` covers both run modes — pick one per session, don't mix them
+for the same service.
+
+**Docker (all five services + Mongo, one command):**
 ```
 cp .env.example .env   # fill in the real values
-docker-compose up
+docker-compose up --build
 ```
 
-Each of the five health endpoints should then be reachable at
+**Manual (bare processes, faster iteration, one terminal per service):** copy
+`.env.example` to `.env` in each service's own directory (`server/.env`,
+`microservices/rag-service/.env`, etc.), fill in real values, then run each service's own
+dev command (`npm run dev` for client/server, `uvicorn app.main:app --reload
+--port <port>` for the Python services).
+
+`.env.example`'s `*_SERVICE_URL` vars default to `localhost`, which is what
+the manual run mode needs. Docker instead needs Docker service names
+(`http://rag-service:8002`) — `docker-compose.yml` overrides those three vars
+for the `server` container automatically, so the same `.env` file works
+either way without editing. See `CLAUDE.md` "Known pitfalls" for why.
+
+Either way, each of the five health endpoints should then be reachable at
 `http://localhost:<port>/health` (or `/api/health` for the gateway).
 
 ## Branch and commit convention

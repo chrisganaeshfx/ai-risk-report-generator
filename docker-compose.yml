@@ -11,6 +11,13 @@ services:
     ports:
       - "4000:4000"
     env_file: .env
+    environment:
+      # Overrides the localhost defaults from .env — inside this container,
+      # the other services are reachable by Docker service name, not
+      # localhost. See CLAUDE.md "Known pitfalls".
+      INGESTION_SERVICE_URL: http://ingestion-service:8001
+      RAG_SERVICE_URL: http://rag-service:8002
+      SPEECH_OCR_SERVICE_URL: http://speech-ocr-service:8003
     depends_on:
       - mongo
     volumes:
@@ -22,6 +29,11 @@ services:
     ports:
       - "3000:3000"
     env_file: .env
+    environment:
+      # Vite's dev-server proxy target — inside this container, `server`
+      # is reachable by Docker service name, not localhost. See CLAUDE.md
+      # "Known pitfalls".
+      SERVER_URL: http://server:4000
     depends_on:
       - server
     volumes:
@@ -29,7 +41,7 @@ services:
       - /app/node_modules
 
   ingestion-service:
-    build: ./ingestion-service
+    build: ./microservices/ingestion-service
     ports:
       - "8001:8001"
     env_file: .env
@@ -37,10 +49,10 @@ services:
       - mongo
       - server
     volumes:
-      - ./ingestion-service:/app
+      - ./microservices/ingestion-service:/app
 
   rag-service:
-    build: ./rag-service
+    build: ./microservices/rag-service
     ports:
       - "8002:8002"
     env_file: .env
@@ -48,17 +60,17 @@ services:
       - mongo
       - server
     volumes:
-      - ./rag-service:/app
+      - ./microservices/rag-service:/app
 
   speech-ocr-service:
-    build: ./speech-ocr-service
+    build: ./microservices/speech-ocr-service
     ports:
       - "8003:8003"
     env_file: .env
     depends_on:
       - server
     volumes:
-      - ./speech-ocr-service:/app
+      - ./microservices/speech-ocr-service:/app
 
 volumes:
   mongo-data:
