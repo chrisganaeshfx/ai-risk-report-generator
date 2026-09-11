@@ -10,8 +10,8 @@
 | What | Where |
 |---|---|
 | API gateway entry | server/src/index.ts |
-| RAG orchestrator | rag-service/app/orchestrator/orchestrator.py |
-| Ingestion pipeline | ingestion-service/app/pipeline/ |
+| RAG orchestrator | microservices/rag-service/app/orchestrator/orchestrator.py |
+| Ingestion pipeline | microservices/ingestion-service/app/pipeline/ |
 | Mongo schemas | server/src/models/ |
 | Env vars | .env.example (never commit .env) |
 
@@ -20,7 +20,7 @@
 - Route handlers in `/server/src/routes/` must never import from `models/`
   directly — always go through `services/`.
 - S5 (speech-ocr-service) writes nothing to MongoDB — it returns results only.
-- LLM provider is set by `LLM_PROVIDER` env var in rag-service — never
+- LLM provider is set by `LLM_PROVIDER` env var in microservices/rag-service — never
   hardcode "anthropic" or "gemini" in application code.
 - All metadata fields on a MongoDB document must include: source_type,
   jurisdiction, facility_type, COPE_dimension, effective_date. See
